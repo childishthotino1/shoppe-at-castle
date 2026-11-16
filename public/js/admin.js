@@ -39,6 +39,7 @@
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.className = 'toast'; }, 2800);
   }
   const fail = (e) => toast(e.message, true);
+  const cash = (c) => '$' + (c / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
 
   const toCents = (v) => { const n = Math.round(parseFloat(String(v).replace(/[$,]/g, '')) * 100); return Number.isFinite(n) ? n : null; };
   const dollars = (c) => (c == null ? '' : (c / 100).toFixed(c % 100 ? 2 : 0));
@@ -186,8 +187,8 @@
       <div class="stats">
         <div class="stat"><small>Today</small><strong>${o.today_count}</strong></div>
         <div class="stat"><small>Next 7 days</small><strong>${o.week_count}</strong></div>
-        <div class="stat"><small>Booked value (7d)</small><strong>${money(o.week_revenue_cents)}</strong></div>
-        <div class="stat"><small>Done this month</small><strong>${money(o.month_completed_cents)}</strong></div>
+        <div class="stat"><small>Booked value (7d)</small><strong>${cash(o.week_revenue_cents)}</strong></div>
+        <div class="stat"><small>Done this month</small><strong>${cash(o.month_completed_cents)}</strong></div>
       </div>
       <div class="two">
         <section class="box"><h2>Still to come today</h2>
@@ -498,7 +499,7 @@
       document.getElementById('ct').innerHTML = clients.map((c) => `<tr style="cursor:pointer" data-c="${c.id}" tabindex="0">
         <td class="name">${esc(c.name)}${c.no_shows ? ` <span class="pill no_show">${c.no_shows} no-show</span>` : ''}</td>
         <td class="desc">${esc(c.email)}${c.email && c.phone ? '<br>' : ''}${esc(c.phone)}</td>
-        <td>${c.visits}</td><td>${c.last_visit ? shortDate(c.last_visit) : '—'}</td><td>${money(c.spent_cents)}</td></tr>`).join('')
+        <td>${c.visits}</td><td>${c.last_visit ? shortDate(c.last_visit) : '—'}</td><td>${cash(c.spent_cents)}</td></tr>`).join('')
         || '<tr><td colspan="5" class="muted">No clients yet — they’ll appear here after their first booking.</td></tr>';
       document.querySelectorAll('[data-c]').forEach((r) => {
         r.onclick = () => openClient(Number(r.dataset.c));
