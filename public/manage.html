@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Your Appointment · The Shoppe at Castle</title>
+  <link rel="icon" href="/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav__in">
+      <a class="brand" href="/">
+        <img src="/img/logo.png" alt="">
+        <span>The Shoppe<small>at Castle</small></span>
+      </a>
+      <a class="btn btn--sm" href="/book">Book again</a>
+    </div>
+  </header>
+  <main class="book">
+    <div class="wrap" style="max-width:720px">
+      <p class="eyebrow">Your appointment</p>
+      <section class="panel" id="panel" style="margin-top:16px" aria-live="polite"><div class="spinner" aria-label="Loading"></div></section>
+    </div>
+  </main>
+  <script src="/js/common.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const { esc, api, money, minLabel, longDate, addDays, parseDate } = window.Shoppe;
+    const panel = document.getElementById('panel');
+    const token = new URLSearchParams(location.search).get('t');
+    let appt; let shop;
+
+    function view(msg) {
+      const a = appt;
+      const cancelled = a.status === 'cancelled';
+      panel.innerHTML = `
+        ${msg ? `<p class="alert alert--ok" style="margin-bottom:16px">${esc(msg)}</p>` : ''}
+        <span class="status-pill ${a.status}">${esc(a.status.replace('_', '-'))}</span>
+        <h2 style="margin-top:12px">${esc(a.service_name)}</h2>
+        <p class="sub">with ${esc(a.staff_name)}</p>
+        <div class="confirm" style="text-align:left;padding:0">
+          <dl style="margin:0 0 20px;max-width:none">
+            <dt>When</dt><dd>${longDate(a.date)}, ${minLabel(a.start_min)} – ${minLabel(a.end_min)}</dd>
+            <dt>Where</dt><dd>${esc(shop.address_line1)}, ${esc(shop.address_line2)}</dd>
+            <dt>Price</dt><dd>${money(a.price_cents)}</dd>
+            <dt>Name</dt><dd>${esc(a.client_name)}</dd>
+          </dl>
+        </div>
+        ${cancelled ? `<a class="btn" href="/book">Book a new appointment</a>` : `
+          <div class="confirm__actions" style="justify-content:flex-start">
+            <a class="btn" href="/api/bookings/${encodeURIComponent(token)}/calendar.ics">Add to calendar</a>
+            ${a.can_change ? `<button class="btn btn--ghost" type="button" id="resched">Reschedule</button>
+            <button class="btn btn--danger" type="button" id="cancel">Cancel</button>` : ''}
+          </div>
+          ${a.can_change || a.status !== 'booked' ? '' : `<p class="note">Online changes close ${shop.cancel_cutoff_hours} hours before your appointment. Please contact the shop${shop.phone ? ` at ${esc(shop.phone)}` : ` on Instagram @${esc(shop.instagram)}`}.</p>`}
+        `}
+        <p class="alert" id="err" role="alert" style="margin-top:16px"></p>
+        <div id="picker"></div>`;
+      const c = document.getElementById('cancel');
+      if (c) c.onclick = async () => {
+        if (!confirm('Cancel this appointment?')) return;
+        c.disabled = true;
+        try { appt = (await api(`/bookings/${encodeURIComponent(token)}/cancel`, { method: 'POST' })).appointment; view('Your appointment has been cancelled.'); } catch (e) { document.getElementById('err').textContent = e.message; c.disabled = false; }
+      };
+      const r = document.getElementById('resched');
+      if (r) r.onclick = picker;
+    }
+
+    async function picker() {
+      const box = document.getElementById('picker');
+      const today = (await api('/shop')).today;
+      let start = today; let date = null;
+      box.innerHTML = `<h3 style="margin:28px 0 12px;font-size:18px;text-transform:uppercase">Pick a new time</h3>
+        <div class="day-nav"><button class="icon-btn" id="pv" aria-label="Earlier">‹</button><strong id="ml"></strong><button class="icon-btn" id="nx" aria-label="Later">›</button></div>
+        <div class="days" id="days"></div><div id="slots"></div>`;
+      const q = `service=${appt.service_id}&staff=${appt.staff_id}`;
+      async function paint() {
+        document.getElementById('pv').disabled = start <= today;
+        const { days } = await api(`/availability/days?${q}&from=${start}&days=14`);
+        document.getElementById('ml').textContent = parseDate(start).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        const el = document.getElementById('days');
+        el.innerHTML = days.map((d) => `<button class="day" data-date="${d.date}" ${d.open ? '' : 'disabled'} aria-pressed="${d.date === date}">
+          <small>${parseDate(d.date).toLocaleDateString('en-US', { weekday: 'short' })}</small><strong>${parseDate(d.date).getDate()}</strong></button>`).join('');
+        el.querySelectorAll('[data-date]').forEach((b) => b.onclick = async () => {
+          date = b.dataset.date;
+          el.querySelectorAll('.day').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          const { slots } = await api(`/availability?${q}&date=${date}`);
+          const s = document.getElementById('slots');
+          s.innerHTML = slots.length ? `<div class="slots">${slots.map((x) => `<button class="slot" data-m="${x.start_min}">${minLabel(x.start_min)}</button>`).join('')}</div>` : '<p class="empty">No openings.</p>';
+          s.querySelectorAll('[data-m]').forEach((sb) => sb.onclick = async () => {
+            if (!confirm(`Move to ${longDate(date)} at ${sb.textContent}?`)) return;
+            try {
+              appt = (await api(`/bookings/${encodeURIComponent(token)}/reschedule`, { method: 'POST', body: { date, start_min: Number(sb.dataset.m) } })).appointment;
+              view('Rescheduled! Your new time is confirmed.');
+            } catch (e) { document.getElementById('err').textContent = e.message; }
+          });
+        });
+      }
+      document.getElementById('pv').onclick = () => { start = addDays(start, -14); if (start < today) start = today; paint(); };
+      document.getElementById('nx').onclick = () => { start = addDays(start, 14); paint(); };
+      paint();
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (!token) { panel.innerHTML = '<h2>Missing link</h2><p class="sub">Use the link from your confirmation email to manage your appointment.</p>'; return; }
+    Promise.all([api(`/bookings/${encodeURIComponent(token)}`), api('/shop')])
+      .then(([b, s]) => { appt = b.appointment; shop = s.shop; view(); })
+      .catch((e) => { panel.innerHTML = `<h2>Not found</h2><p class="sub">${esc(e.message)}</p>`; });
+  }());
+  </script>
+</body>
+</html>

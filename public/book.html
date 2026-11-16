@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book an Appointment · The Shoppe at Castle</title>
+  <meta name="description" content="Book a haircut, fade or color appointment online at The Shoppe at Castle in Butcher's Hill, Baltimore.">
+  <link rel="icon" href="/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav__in">
+      <a class="brand" href="/">
+        <img src="/img/logo.png" alt="">
+        <span>The Shoppe<small>at Castle</small></span>
+      </a>
+      <a class="btn btn--ghost btn--sm" href="/">← Back to site</a>
+    </div>
+  </header>
+
+  <main class="book">
+    <div class="wrap">
+      <p class="eyebrow">Online booking</p>
+      <ol class="steps" id="steps" aria-hidden="true"><li></li><li></li><li></li><li></li></ol>
+      <div class="book__grid">
+        <section class="panel" id="panel" aria-live="polite"><div class="spinner" aria-label="Loading"></div></section>
+        <aside class="panel summary" id="summary" hidden></aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/book.js"></script>
+</body>
+</html>

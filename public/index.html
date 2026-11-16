@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Shoppe at Castle · Hair Studio in Butcher's Hill, Baltimore</title>
+  <meta name="description" content="Femme-owned hair studio at 2027 East Lombard Street in Butcher's Hill, Baltimore. Fades, custom cuts, mullets, shags and vivid color. Appointment only — book online.">
+  <meta property="og:title" content="The Shoppe at Castle">
+  <meta property="og:description" content="Femme-owned hair studio in Butcher's Hill, Baltimore. Book online.">
+  <meta property="og:image" content="/img/logo.png">
+  <link rel="icon" href="/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Josefin+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HairSalon",
+    "name": "The Shoppe at Castle",
+    "image": "/img/logo.png",
+    "address": { "@type": "PostalAddress", "streetAddress": "2027 East Lombard Street", "addressLocality": "Baltimore", "addressRegion": "MD", "postalCode": "21231", "addressCountry": "US" },
+    "sameAs": ["https://instagram.com/theshoppeatcastle"]
+  }
+  </script>
+</head>
+<body>
+  <div class="announce" id="announce" role="status"></div>
+
+  <header class="nav">
+    <div class="wrap nav__in">
+      <a class="brand" href="/">
+        <img src="/img/logo.png" alt="">
+        <span>The Shoppe<small>at Castle</small></span>
+      </a>
+      <nav class="nav__links" aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#team">Team</a>
+        <a href="#work">Work</a>
+        <a href="#visit">Visit</a>
+        <a class="btn btn--sm" href="/book">Book now</a>
+      </nav>
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false" aria-controls="sheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div class="nav__sheet" id="sheet">
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+      <a href="#work">Work</a>
+      <a href="#visit">Visit</a>
+      <a class="btn" href="/book">Book now</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero__grid">
+        <div>
+          <p class="eyebrow">Butcher's Hill · Baltimore</p>
+          <h1>Hair for <em>every</em> body.</h1>
+          <p class="hero__lede">A femme-owned studio for precision fades, custom cuts, mullets, shags and lived-in color. Gender-free pricing, good music and an unhurried chair — by appointment only.</p>
+          <div class="hero__cta">
+            <a class="btn btn--accent" href="/book">Book an appointment</a>
+            <a class="btn btn--ghost" href="#services">See the menu</a>
+          </div>
+          <div class="badges">
+            <span class="badge">✦ Femme-owned</span>
+            <span class="badge">✦ Queer &amp; trans affirming</span>
+            <span class="badge">✦ Appointment only</span>
+          </div>
+        </div>
+        <div class="hero__art" aria-hidden="true">
+          <div class="ring"></div>
+          <img class="logo-big" src="/img/logo.png" alt="">
+          <img class="ph ph--1" src="/img/gallery/pompadour-undercut.jpg" alt="">
+          <img class="ph ph--2" src="/img/gallery/lavender-silver.jpg" alt="">
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--paper" id="services">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <p class="eyebrow">The menu</p>
+            <h2>Services</h2>
+          </div>
+          <p>Prices are by service, never by gender. Color prices depend on length and history — book a free consultation if you're not sure.</p>
+        </div>
+        <div class="menu-tabs" id="menuTabs" role="toolbar" aria-label="Filter services"></div>
+        <div class="menu" id="menu"><div class="spinner" aria-label="Loading"></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="team">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <p class="eyebrow">Behind the chair</p>
+            <h2>The team</h2>
+          </div>
+        </div>
+        <div class="team" id="teamList"></div>
+      </div>
+    </section>
+
+    <section class="section section--paper" id="work">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <p class="eyebrow">Recent work</p>
+            <h2>Fresh out the chair</h2>
+          </div>
+          <a class="btn btn--ghost btn--sm" id="igLink" href="https://instagram.com/theshoppeatcastle" target="_blank" rel="noopener">More on Instagram</a>
+        </div>
+        <div class="gallery">
+          <figure><img loading="lazy" src="/img/gallery/skin-fade-part.jpg" alt="Skin fade with a hard part and textured top"></figure>
+          <figure><img loading="lazy" src="/img/gallery/lavender-silver.jpg" alt="Long layered hair in lavender melting to silver"></figure>
+          <figure><img loading="lazy" src="/img/gallery/mullet-design.jpg" alt="Modern mullet with a shaved line design"></figure>
+          <figure><img loading="lazy" src="/img/gallery/blue-curly-shag.jpg" alt="Curly shag with blue color pieces"></figure>
+          <figure><img loading="lazy" src="/img/gallery/pompadour-undercut.jpg" alt="Slicked-back undercut with a faded side"></figure>
+          <figure><img loading="lazy" src="/img/gallery/shag-mullet.jpg" alt="Dark layered shag mullet"></figure>
+          <figure><img loading="lazy" src="/img/gallery/taper-fade.jpg" alt="Classic taper fade with textured top"></figure>
+          <figure><img loading="lazy" src="/img/gallery/barber-chair.jpg" alt="A client smiling in the mirror at the shop"></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="visit">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <p class="eyebrow">Come see us</p>
+            <h2>Visit</h2>
+          </div>
+        </div>
+        <div class="visit">
+          <div>
+            <div class="card">
+              <h3>Find us</h3>
+              <p id="address"><strong>2027 East Lombard Street</strong><br>Baltimore, MD 21231</p>
+              <p style="margin-top:10px;color:var(--muted)">In Butcher's Hill, a block from Patterson Park.</p>
+              <p id="contact" style="margin-top:14px;display:grid;gap:4px"></p>
+            </div>
+            <div class="card">
+              <h3>Hours</h3>
+              <ul class="hours" id="hours"></ul>
+              <p class="note">Appointment only — please book ahead so we can be ready for you.</p>
+            </div>
+          </div>
+          <div class="map">
+            <iframe title="Map to The Shoppe at Castle" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=2027+E+Lombard+St,+Baltimore,+MD+21231&output=embed"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <h4>The Shoppe at Castle</h4>
+          <p>Femme-owned hair studio.<br>2027 East Lombard Street, Baltimore, MD.</p>
+          <div class="rainbow" role="img" aria-label="LGBTQ+ affirming space">
+            <span style="background:#e40303"></span><span style="background:#ff8c00"></span><span style="background:#ffed00"></span>
+            <span style="background:#008026"></span><span style="background:#24408e"></span><span style="background:#732982"></span>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/book">Book online</a></li>
+            <li><a href="#services">Services &amp; prices</a></li>
+            <li><a href="#team">The team</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow</h4>
+          <ul>
+            <li><a href="https://instagram.com/theshoppeatcastle" target="_blank" rel="noopener">@theshoppeatcastle</a></li>
+            <li><a href="https://instagram.com/miaelizabethbailey" target="_blank" rel="noopener">@miaelizabethbailey</a></li>
+            <li><a href="https://instagram.com/raefunkfades" target="_blank" rel="noopener">@raefunkfades</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__copy">
+        <span>&copy; <span id="year"></span> The Shoppe at Castle</span>
+        <a href="/admin/">Staff sign in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

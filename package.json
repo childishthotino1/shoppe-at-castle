@@ -1,0 +1,17 @@
+{
+  "name": "shoppe-at-castle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website, online booking and staff dashboard for The Shoppe at Castle (Butcher's Hill, Baltimore).",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
