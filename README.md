@@ -52,3 +52,6 @@ server/   index.js (app), db.js (schema + seed), scheduling.js (availability eng
 public/   index.html, book.html, manage.html, admin/, css/, js/, img/
 test/     node:test unit + API tests
 ```
+
+## Preview on Vercel
+`vercel.json` + `api/index.js` deploy a **demo** copy to Vercel: the site runs as a serverless function with sample bookings in demo mode. Vercel's disk is temporary, so data resets whenever Vercel starts a fresh instance. Use it for previews only, not for real bookings. Demo staff sign-in: `rae@theshoppeatcastle.com` or `mia@theshoppeatcastle.com`, password `preview123`.

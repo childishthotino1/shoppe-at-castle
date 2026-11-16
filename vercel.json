@@ -1,0 +1,11 @@
+{
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/uploads/(.*)", "destination": "/api/index" }
+  ],
+  "functions": {
+    "api/index.js": { "includeFiles": "server/**" }
+  }
+}

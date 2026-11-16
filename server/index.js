@@ -10,6 +10,7 @@ function createApp({ dbFile, uploadDir, seedPassword } = {}) {
   const dataDir = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
   const db = dbm.open(dbFile || path.join(dataDir, 'shoppe.db'));
   const creds = dbm.seed(db, { password: seedPassword || process.env.SEED_PASSWORD });
+  if (creds && process.env.DEMO === '1') require('./demo').seedDemo(db);
   uploadDir = uploadDir || path.join(dataDir, 'uploads');
 
   const app = express();
