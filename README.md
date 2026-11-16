@@ -54,4 +54,4 @@ test/     node:test unit + API tests
 ```
 
 ## Preview on Vercel
-`vercel.json` + `api/index.js` deploy a **demo** copy to Vercel: the site runs as a serverless function with sample bookings in demo mode. Vercel's disk is temporary, so data resets whenever Vercel starts a fresh instance. Use it for previews only, not for real bookings. Demo staff sign-in: `rae@theshoppeatcastle.com` or `mia@theshoppeatcastle.com`, password `preview123`.
+Vercel builds the `Dockerfile` as a container. The preview project sets `DEMO=1`, `SEED_PASSWORD=preview123` and `DATA_DIR=/tmp/shoppe`, so it starts with sample bookings. Its disk is temporary, and data resets when Vercel starts a fresh container. Use it for previews only. Demo staff sign-in: `rae@theshoppeatcastle.com` or `mia@theshoppeatcastle.com`, password `preview123`.
