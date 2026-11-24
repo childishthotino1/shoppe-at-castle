@@ -54,7 +54,13 @@ module.exports = function publicRoutes(db, { baseUrl }) {
       s.min_price_cents = offers.length ? Math.min(...offers.map((o) => o.price_cents)) : s.price_cents;
       s.price_varies = new Set(offers.map((o) => o.price_cents)).size > 1;
     }
-    res.json({ shop, staff, services: services.filter((s) => s.staff.length), hours, today: nowInZone(settings.timezone).date });
+    const out = { shop, staff, services: services.filter((s) => s.staff.length), hours, today: nowInZone(settings.timezone).date };
+    // Preview deployments only: publish the demo staff logins so anyone can try the dashboard.
+    if (process.env.DEMO === '1' && process.env.SEED_PASSWORD) {
+      out.demo_logins = db.prepare('SELECT name, email FROM staff WHERE active = 1 ORDER BY sort_order, id').all()
+        .map((s) => ({ ...s, password: process.env.SEED_PASSWORD }));
+    }
+    res.json(out);
   });
 
   function parseAvailQuery(req) {

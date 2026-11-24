@@ -57,7 +57,12 @@ module.exports = function adminRoutes(db, { baseUrl, uploadDir }) {
     res.json({ me, settings: getSettings(db), today: nowInZone(getSettings(db).timezone).date });
   });
 
+  // In demo mode the logins are shared publicly, so keep them working for everyone.
+  const DEMO = process.env.DEMO === '1';
+  const demoLocked = (res) => res.status(403).json({ error: 'Turned off on the preview site so the demo logins keep working for everyone.' });
+
   r.post('/me/password', (req, res) => {
+    if (DEMO) return demoLocked(res);
     const { current, next } = req.body || {};
     if (!auth.verifyPassword(String(current || ''), req.staff.password_hash)) return res.status(400).json({ error: 'Current password is incorrect.' });
     if (String(next || '').length < 8) return res.status(400).json({ error: 'New password must be at least 8 characters.' });
@@ -221,6 +226,11 @@ module.exports = function adminRoutes(db, { baseUrl, uploadDir }) {
     if (b.photo_url != null) set('photo_url', str(b.photo_url, 500));
     if (b.color != null && /^#[0-9a-f]{6}$/i.test(b.color)) set('color', b.color);
     if (b.accepts_bookings != null) set('accepts_bookings', bool(b.accepts_bookings));
+    if (DEMO) {
+      const cur = db.prepare('SELECT email FROM staff WHERE id = ?').get(id);
+      const emailChange = b.email != null && cur && str(b.email, 120).toLowerCase() !== cur.email.toLowerCase();
+      if (emailChange || (b.active != null && !bool(b.active))) return demoLocked(res);
+    }
     if (b.email != null) {
       const email = str(b.email, 120).toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email.' });
@@ -244,6 +254,7 @@ module.exports = function adminRoutes(db, { baseUrl, uploadDir }) {
   });
 
   r.post('/staff/:id/reset-password', auth.requireOwner, (req, res) => {
+    if (DEMO) return demoLocked(res);
     const id = int(req.params.id);
     const temp = token(9);
     db.prepare('UPDATE staff SET password_hash = ?, must_change_pw = 1 WHERE id = ?').run(auth.hashPassword(temp), id);

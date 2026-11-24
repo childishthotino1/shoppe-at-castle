@@ -56,20 +56,39 @@
     app.innerHTML = `<div class="auth"><form class="auth__card form" id="login">
       <img src="/img/logo.png" alt="">
       <h1>Staff sign in</h1><p class="sub">The Shoppe at Castle</p>
+      <div id="demo"></div>
       <div class="field"><label for="em">Email</label><input id="em" type="email" autocomplete="username" required></div>
       <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required></div>
       <p class="alert" id="err" role="alert"></p>
       <button class="btn btn--block" type="submit">Sign in</button>
       <p class="note" style="text-align:center">Forgot your password? Ask a shop owner to reset it.</p>
     </form></div>`;
-    document.getElementById('em').focus();
-    document.getElementById('login').onsubmit = async (e) => {
+    const em = document.getElementById('em');
+    const pw = document.getElementById('pw');
+    const form = document.getElementById('login');
+    em.focus();
+    form.onsubmit = async (e) => {
       e.preventDefault();
       try {
-        await api('/login', { method: 'POST', noAuthRedirect: true, body: { email: document.getElementById('em').value, password: document.getElementById('pw').value } });
+        await api('/login', { method: 'POST', noAuthRedirect: true, body: { email: em.value, password: pw.value } });
         boot();
       } catch (ex) { document.getElementById('err').textContent = ex.message; }
     };
+    // Preview site: list the shared demo logins with one-tap sign-in.
+    fetch('/api/shop').then((r) => r.json()).then((d) => {
+      if (!d.demo_logins || !d.demo_logins.length) return;
+      const box = document.getElementById('demo');
+      box.className = 'demo-logins';
+      box.innerHTML = `<p class="demo-logins__title">Preview \u2014 try it with a demo login</p>
+        ${d.demo_logins.map((l, i) => `<div class="demo-logins__row">
+          <div><b>${esc(l.name)}</b><br><span>${esc(l.email)}</span><br><span>Password: <code>${esc(l.password)}</code></span></div>
+          <button type="button" class="btn btn--sm" data-i="${i}">Sign in as ${esc(l.name)}</button></div>`).join('')}`;
+      box.querySelectorAll('[data-i]').forEach((b) => b.onclick = () => {
+        const l = d.demo_logins[Number(b.dataset.i)];
+        em.value = l.email; pw.value = l.password;
+        form.requestSubmit();
+      });
+    }).catch(() => {});
   }
 
   function renderChangePassword() {
